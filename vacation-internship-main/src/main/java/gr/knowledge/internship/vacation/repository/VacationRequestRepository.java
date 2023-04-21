@@ -15,7 +15,11 @@ public interface VacationRequestRepository extends JpaRepository<VacationRequest
 
 
     // task 4 : Vacation  Requests by Company //
-    @Query("SELECT v FROM VacationRequest v INNER JOIN Employee e ON e.id = v.employee.id INNER JOIN Company c ON e.employeeCompany.id = c.id WHERE v.startDate >= :startDate AND v.endDate <= :endDate and v.status =:status and c.id =:companyId")
+    @Query("SELECT v FROM VacationRequest v INNER JOIN Employee e ON e.id = v.employee.id INNER JOIN Company c ON e.employeeCompany.id = c.id " +
+            "WHERE (v.startDate >= :startDate OR v.endDate <= :endDate) " +
+            "AND (v.endDate > :startDate AND v.startDate < :endDate) " +
+            "AND v.status =:status " +
+            "AND c.id =:companyId")
     List<VacationRequest> getVacationRequest(@Param("startDate") LocalDate startDate,
                                              @Param("endDate") LocalDate endDate,
                                              @Param("status") String status,
